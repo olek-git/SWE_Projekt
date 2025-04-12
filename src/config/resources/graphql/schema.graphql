@@ -1,0 +1,121 @@
+schema {
+    query: Query
+    mutation : Mutation
+}
+
+"Funktionen um Autodaten zu lesen"
+type Query{
+    autos(suchkriterien: SuchkriterienInput): [Auto!]
+    
+    auto(id: ID!): Auto
+}
+
+"Funktion um Autos neu anzulegen, zu aktualisieren oder zu löschen"
+type Mutation {
+    create(input: AutoInput!): CreatePayload
+
+    update(input: AutoUodateInput!): UpdatePayload
+
+    delete(id: ID!): Boolean
+
+    # Mutation, wenn z.B der Login Zeitpunkt gespeichert wird
+    token(username: String!, password: String!): TokenResult
+    refresh(refresh_token: String!): TokenResult
+}
+
+"Daten zur Ausstattung eines Buches"
+type Ausstattung {
+    klimaanlage: Boolean!
+    sitzheizung: Boolean!
+    getriebe: Art
+    innenraummaterial: String!
+}
+
+type Marke {
+    name: String!
+    gründungsjahr: Int!
+    gründer: String!
+}
+
+type Auto {
+    id: Int!
+    version: Int!
+    bezeichnung: String!
+    fahrgestellnummer: String!
+    baujahr: Int!
+    ps: Int!
+    neuKaufpreis: Int!
+    maxGeschwindigkeit: Int!
+    #1:1-Beziehung
+    ausstattung: Ausstattung!
+    #1:n-Beziehung
+    marke: Marke!
+}
+
+"Enum-Typ für die Getriebe Art eines Buches"
+enum Art {
+    AUTOMATIK
+    MANUELL
+}
+
+"Suchkriterien für ein Auto"
+input SuchkriterienInput {
+    bezeichnung: String
+    fahrgestellnummer: String
+    ps: Int
+    marke: String
+}
+
+"Daten zur Ausstattun eines neuen Autos"
+input AusstattungInput {
+    klimaanlage: Boolean
+    sitzheizung: Boolean
+    getriebe: Art!
+    innenraummaterial: String!
+}
+
+"Daten zur Marke eines neuen Autos"
+input MarkeInput {
+    name: String!
+    gründungsjahr: Int!
+    gründer: String!
+}
+
+"Date eines neuen Autos"
+input AutoInput {
+    bezeichnung: String
+    fahrgestellnummer: String
+    baujahr: Int
+    ps: Int
+    neuKaufpreis: Int
+    maxGeschwindigkeit: Int
+    ausstattung: Ausstattung!
+    marke: Marke!
+}
+
+"Daten für ein zu änderndes Auto"
+input AutoUpdateInput {
+    id: Int
+    version: Int
+    bezeichnung: String
+    fahrgestellnummer: String
+    baujahr: Int
+    ps: Int
+    neuKaufpreis: Int
+    maxGeschwindigkeit: Int
+}
+
+type CreatePayload {
+  id: Int
+}
+
+type UpdatePayload {
+  version: Int
+}
+
+type TokenResult {
+  access_token: String!
+  expires_in: Int!
+  refresh_token: String!
+  refresh_expires_in: Int!
+}
