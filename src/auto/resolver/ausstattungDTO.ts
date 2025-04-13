@@ -17,7 +17,7 @@ export class AusstattungDTO {
     @IsBoolean()
     @IsOptional()
     @ApiProperty({example: true, type: Boolean})
-    readonly klimaanlage! : boolean |undefined;
+    readonly klimaanlage! : boolean | undefined;
 
     @IsBoolean()
     @IsOptional()

@@ -40,7 +40,7 @@ export class AutoDtoOhneRef {
 
     @IsOptional()
     @ApiProperty({ example: 20500 , type: Number })
-    readonly neuKaufpreis!: number | undefined;
+    readonly neuKaufpreis!: number;
 
     @ApiProperty({example: 220, type: Number})
     readonly maxGeschwindigkeit! : number;
