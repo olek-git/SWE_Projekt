@@ -98,8 +98,8 @@ export class AutoMutationResolver {
         const marke: Marke = {
             id: undefined,
             name: markeDTO.name,
-            gründungsjahr: markeDTO.gründungsjahr,
-            gründer: markeDTO.gründer,
+            gruendungsjahr: markeDTO.gruendungsjahr,
+            gruender: markeDTO.gruender,
             autos: undefined,
         };
         const auto: Auto = {

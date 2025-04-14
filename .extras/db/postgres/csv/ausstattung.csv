@@ -1,0 +1,7 @@
+id ;klimaanlage;sitzheizung;getriebe;innenraummaterial;auto_id
+12;true;false;AUTOMATIK;leder;1
+13;true;true;MANUELL;leder;2
+14;false;true;MANUELL;stoff;3
+15;true;true;AUTOMATIK;alcantara;4
+16;false;false;MANUELL;stoff;5
+17;false;true;MANUELL;leder;6

@@ -19,9 +19,9 @@ export class MarkeDTO {
             message: 'Baujahr muss genau 4 Ziffern enthalten.'
     })
     @ApiProperty({example: 2004, type: Number})
-    readonly gründungsjahr! : number
+    readonly gruendungsjahr! : number
 
     @ApiProperty({example: "Ferdinand Porsche", type: String})
-    readonly gründer! : string
+    readonly gruender! : string
 }
 /* eslint-enable @typescript-eslint/no-magic-numbers */

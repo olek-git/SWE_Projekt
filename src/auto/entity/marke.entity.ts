@@ -17,11 +17,11 @@ export class Marke{
 
     @Column()
     @ApiProperty({example: 2004, type: Number})
-    readonly gründungsjahr! : number
+    readonly gruendungsjahr! : number
 
     @Column()
     @ApiProperty({example: "Ferdinand Porsche", type: String})
-    readonly gründer! : string
+    readonly gruender! : string
 
     @OneToMany(() => Auto, (auto) => auto.marke, {
             cascade: ['insert', 'remove'],
@@ -32,7 +32,7 @@ export class Marke{
         JSON.stringify({
             id: this.id,
             name : this.name,
-            gründungsjahr : this.gründungsjahr,
-            gründer : this.gründer
+            gruendungsjahr : this.gruendungsjahr,
+            gruender : this.gruender
         });
 }
