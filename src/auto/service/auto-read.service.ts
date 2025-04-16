@@ -54,12 +54,11 @@ export class AutoReadService {
      */
     async findById({
         id,
-        mitMarke = false,
     }: FindByIdParams): Promise<Readonly<Auto>>{
         this.#logger.debug('findById: id=%d', id)
         
         const auto : Auto | null = await this.#queryBuilder
-            .buildId({ id, mitMarke })
+            .buildId({ id })
             .getOne();
         if(auto === null){
             throw new NotFoundException(`Es gibt kein Auto mit der ID ${id}.`);
@@ -71,12 +70,6 @@ export class AutoReadService {
                 auto.toString,
                 auto.ausstattung,
             );
-            if(mitMarke) {
-                this.#logger.debug(
-                    'findById: marke=%o',
-                    auto.marke,
-                );
-            }
         }
 
         return auto;

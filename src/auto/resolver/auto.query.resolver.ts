@@ -1,5 +1,5 @@
 import { type Suchkriterien } from '../service/suchkriterien.js';
-import { HttpExceptionFilter } from './http-exception.filter'; 
+import { HttpExceptionFilter } from './http-exception.filter.js'; 
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { UseInterceptors, UseFilters } from '@nestjs/common';
 import { AutoReadService } from '../service/auto-read.service.js';

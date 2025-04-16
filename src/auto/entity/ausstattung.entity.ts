@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {Auto} from './auto.entity.js'
+import { Auto } from './auto.entity.js'
 import { Entity,
          PrimaryGeneratedColumn,
          Column,

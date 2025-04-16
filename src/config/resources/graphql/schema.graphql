@@ -14,7 +14,7 @@ type Query{
 type Mutation {
     create(input: AutoInput!): CreatePayload
 
-    update(input: AutoUodateInput!): UpdatePayload
+    update(input: AutoUpdateInput!): UpdatePayload
 
     delete(id: ID!): Boolean
 
@@ -33,8 +33,8 @@ type Ausstattung {
 
 type Marke {
     name: String!
-    gründungsjahr: Int!
-    gründer: String!
+    gruendungsjahr: Int!
+    gruender: String!
 }
 
 type Auto {
@@ -49,7 +49,7 @@ type Auto {
     #1:1-Beziehung
     ausstattung: Ausstattung!
     #1:n-Beziehung
-    marke: Marke!
+    marke: Marke
 }
 
 "Enum-Typ für die Getriebe Art eines Buches"
@@ -77,8 +77,8 @@ input AusstattungInput {
 "Daten zur Marke eines neuen Autos"
 input MarkeInput {
     name: String!
-    gründungsjahr: Int!
-    gründer: String!
+    gruendungsjahr: Int!
+    gruender: String!
 }
 
 "Date eines neuen Autos"
@@ -89,8 +89,8 @@ input AutoInput {
     ps: Int
     neuKaufpreis: Int
     maxGeschwindigkeit: Int
-    ausstattung: Ausstattung!
-    marke: Marke!
+    ausstattung: AusstattungInput!
+    marke: MarkeInput!
 }
 
 "Daten für ein zu änderndes Auto"

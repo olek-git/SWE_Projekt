@@ -8,7 +8,7 @@ import { IsBoolean,
          IsOptional ,
          Matches 
 } from 'class-validator';
-import { getriebeArt } from '../entity/ausstattung.entity';
+import { getriebeArt } from '../entity/ausstattung.entity.js';
 
 /**
  * Entity-Klasse für Ausstattung ohne TypeORM.

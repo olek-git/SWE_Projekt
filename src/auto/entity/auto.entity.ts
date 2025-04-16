@@ -14,8 +14,8 @@ import {
     UpdateDateColumn,
     VersionColumn,
 } from 'typeorm';
-import {Marke} from './marke.entity.js';
-import{AutoFile} from './autofile.entity.js';
+import { Marke } from './marke.entity.js';
+import{ AutoFile } from './autofile.entity.js';
 import { dbType } from '../../config/db.js';
 import { Ausstattung } from './ausstattung.entity.js';
 
@@ -43,17 +43,17 @@ export class Auto{
     @ApiProperty({example: 225, type: Number})
     readonly ps! : number;
 
-    @Column()
+    @Column({name: 'neukaufpreis'})
     @ApiProperty({ example: 20500 , type: Number })
     readonly neuKaufpreis!: number;
 
-    @Column()
+    @Column({name: 'maxgeschwindigkeit'})
     @ApiProperty({example: 220, type: Number})
     readonly maxGeschwindigkeit! : number;
 
     @ManyToOne(() => Marke, (marke) => marke.autos)
     @JoinColumn({ name: 'marke_id' }) 
-    readonly marke! : Marke | undefined;
+    marke : Marke | undefined;
 
     @OneToOne(() => AutoFile, (autoFile) => autoFile.auto, {
         cascade: ['insert', 'remove'],

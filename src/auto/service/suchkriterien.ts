@@ -1,3 +1,4 @@
+import { getriebeArt } from '../../../src/auto/entity/ausstattung.entity.js';
 /**
  * Das Modul besteht aus der Klasse {@linkcode Suchkriterien}.
  * @packageDocumentation
@@ -12,4 +13,5 @@ export interface Suchkriterien{
     readonly ps? : number;
     readonly maxGeschwindigkeit? : number;
     readonly marke? : string;
+    readonly getriebeArt? : getriebeArt
 }

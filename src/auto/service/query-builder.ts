@@ -54,23 +54,20 @@ export class QueryBuilder{
     * @param id ID des gesuchten Autos
     * @returns QueryBuilder
     * */
-    buildId({ id, mitMarke = false }: BuildIdParams) {
+    buildId({ id }: BuildIdParams) {
         // QueryBuilder "buch" fuer Repository<Buch>
         const queryBuilder = this.#repo.createQueryBuilder(this.#autoAlias);
 
         // Fetch-Join: aus QueryBuilder "auto" die Property "ausstattung" ->  Tabelle "ausstattung"
         queryBuilder.innerJoinAndSelect(
-            `${this.#autoAlias}.austattung`,
+            `${this.#autoAlias}.ausstattung`,
             this.#ausstattungAlias,
         );
 
-        if (mitMarke) {
-            // Fetch-Join: aus QueryBuilder "auto" die Property "marke" -> Tabelle "marke"
-            queryBuilder.leftJoinAndSelect(
-                `${this.#autoAlias}.marke`,
-                this.#markeAlias,
-            );
-        }
+        queryBuilder.leftJoinAndSelect(
+            `${this.#autoAlias}.marke`,
+            this.#markeAlias,
+        );
 
         queryBuilder.where(`${this.#autoAlias}.id = :id`, { id: id }); // eslint-disable-line object-shorthand
         return queryBuilder;

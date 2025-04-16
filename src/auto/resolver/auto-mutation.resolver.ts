@@ -10,7 +10,7 @@ import { AutoWriteService } from '../service/auto.write.service.js';
 import { Auto } from '../entity/auto.entity.js';
 import { Ausstattung } from '../entity/ausstattung.entity.js';
 import { Marke } from '../entity/marke.entity.js';
-import { CreatePayload } from '../../../../BuchV1/dist/buch/resolver/buch-mutation.resolver';
+import { CreatePayload } from '../../../../BuchV1/dist/buch/resolver/buch-mutation.resolver.js';
 import { IdInput } from './auto.query.resolver.js';
 
 export type createPayload = {

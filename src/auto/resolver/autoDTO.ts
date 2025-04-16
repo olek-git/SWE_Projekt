@@ -12,8 +12,8 @@ import { IsString,
         ValidateNested
 } from 'class-validator';
 import {Type } from 'class-transformer';
-import { AusstattungDTO } from "../resolver/ausstattungDTO";
-import { MarkeDTO } from "../resolver/markeDTO";
+import { AusstattungDTO } from "../resolver/ausstattungDTO.js";
+import { MarkeDTO } from "../resolver/markeDTO.js";
 
 /**
  * Entity-Klasse für Autos ohne TypeORM und ohne Referenzen.
