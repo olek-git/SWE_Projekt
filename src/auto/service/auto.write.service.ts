@@ -49,15 +49,19 @@ export class AutoWriteService {
 
     readonly #logger = getLogger(AutoWriteService.name); 
 
+    readonly #markeRepository : Repository<Marke>;
+
     constructor(
         @InjectRepository(Auto) repo: Repository<Auto>,
         @InjectRepository(AutoFile) fileRepo: Repository<AutoFile>,
+        @InjectRepository(Marke) markeRepo: Repository<Marke>,
         readService: AutoReadService,
         mailService: MailService,
     ) {
         this.#repo = repo;
         this.#fileRepo = fileRepo;
         this.#readService = readService;
+        this.#markeRepository = markeRepo;
         this.#mailService = mailService;
     }
 
@@ -66,16 +70,29 @@ export class AutoWriteService {
      * @param auto Das neu abzulegende Auto
      * @returns Die ID des neu angelegten Autos
      */
-    async create(auto : Auto) {
-        this.#logger.debug('create: auto=%o', auto);
-        await this.#validateCreate(auto);
+   async create(auto: Auto) {
+    this.#logger.debug('create: auto=%o', auto);
+    await this.#validateCreate(auto);
 
-        const autoDb = await this.#repo.save(auto); // implizite Transaktion
-        await this.#sendmail(autoDb);
-
-        return autoDb.id!;
+    // Marke anhand der ID aus der Datenbank laden
+    const markeId = auto.marke?.id;
+    if (!markeId) {
+        throw new Error('Marken-ID muss angegeben werden');
     }
 
+    const marke = await this.#markeRepository.findOne({ where: { id: markeId } });
+    if (!marke) {
+        throw new Error(`Marke mit ID ${markeId} nicht gefunden`);
+    }
+
+    // Marke zuweisen (nur Referenz, kein neues Objekt)
+    auto.marke = marke;
+
+    const autoDb = await this.#repo.save(auto); // implizite Transaktion
+    await this.#sendmail(autoDb);
+
+    return autoDb.id!;
+    }
     /**
      * Zu einem vorhandenen Auto eine Binärdatei mit z.B. einem Bild abspeichern.
      * @param autoId ID des vorhandenen Autos

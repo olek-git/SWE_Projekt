@@ -9,7 +9,6 @@ import { AutoDTO } from './autoDTO.js';
 import { AutoWriteService } from '../service/auto.write.service.js';
 import { Auto } from '../entity/auto.entity.js';
 import { Ausstattung } from '../entity/ausstattung.entity.js';
-import { Marke } from '../entity/marke.entity.js';
 import { CreatePayload } from '../../../../BuchV1/dist/buch/resolver/buch-mutation.resolver.js';
 import { IdInput } from './auto.query.resolver.js';
 
@@ -45,14 +44,18 @@ export class AutoMutationResolver {
 
     @Mutation()
     @Roles('admin', 'user')
-    async create(@Args('input') autoDTO: AutoDTO) {
+    async create(@Args('input') autoDTO: AutoDTO): Promise<CreatePayload> {
         this.#logger.debug('create: autoDTO=%o', autoDTO);
 
-        const auto = this.#autoDtoToAuto(autoDTO);
-        const id = await this.#service.create(auto);
-        this.#logger.debug('createAuto: id=%d', id);
-        const payload: CreatePayload = { id };
-        return payload;
+    // DTO in Entity umwandeln
+    const auto = this.#autoDtoToAuto(autoDTO);
+
+    // Übergib das Auto an den Service
+    const id = await this.#service.create(auto);
+
+    this.#logger.debug('createAuto: id=%d', id);
+
+    return { id };
     }
 
     @Mutation()
@@ -82,26 +85,17 @@ export class AutoMutationResolver {
         this.#logger.debug('deleteAuto: deletePerformed=%s', deletePerformed);
         return deletePerformed;
     }
-
     #autoDtoToAuto(autoDTO: AutoDTO): Auto {
         const ausstattungDTO = autoDTO.ausstattung;
         const ausstattung: Ausstattung = {
             id: undefined,
-            klimaanlage: ausstattungDTO.klimaanlage??false,
-            sitzheizung: ausstattungDTO.sitzheizung??false,
+            klimaanlage: ausstattungDTO.klimaanlage ?? false,
+            sitzheizung: ausstattungDTO.sitzheizung ?? false,
             getriebe: ausstattungDTO.getriebe,
             innenraummaterial: ausstattungDTO.innenraummaterial,
             auto: undefined,
         };
-
-        const markeDTO = autoDTO.marke;
-        const marke: Marke = {
-            id: undefined,
-            name: markeDTO.name,
-            gruendungsjahr: markeDTO.gruendungsjahr,
-            gruender: markeDTO.gruender,
-            autos: undefined,
-        };
+    
         const auto: Auto = {
             id: undefined,
             version: undefined,
@@ -111,14 +105,15 @@ export class AutoMutationResolver {
             ps: autoDTO.ps,
             neuKaufpreis: autoDTO.neuKaufpreis,
             maxGeschwindigkeit: autoDTO.maxGeschwindigkeit,
-            marke,
+            marke: { id: autoDTO.markeId } as any, // Nur ID wird gesetzt
             file: undefined,
             ausstattung,
             erzeugt: new Date(),
             aktualisiert: new Date(),
         };
-
-        auto.ausstattung!.auto = auto;
+    
+        ausstattung.auto = auto;
+    
         return auto;
     }
 

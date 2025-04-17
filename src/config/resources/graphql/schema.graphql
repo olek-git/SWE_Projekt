@@ -75,13 +75,6 @@ input AusstattungInput {
     innenraummaterial: String!
 }
 
-"Daten zur Marke eines neuen Autos"
-input MarkeInput {
-    name: String!
-    gruendungsjahr: Int!
-    gruender: String!
-}
-
 "Date eines neuen Autos"
 input AutoInput {
     bezeichnung: String
@@ -91,7 +84,7 @@ input AutoInput {
     neuKaufpreis: Int
     maxGeschwindigkeit: Int
     ausstattung: AusstattungInput!
-    marke: MarkeInput!
+    markeId: Int!
 }
 
 "Daten für ein zu änderndes Auto"

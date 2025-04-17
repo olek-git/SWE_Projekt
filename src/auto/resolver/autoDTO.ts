@@ -11,11 +11,11 @@ import { IsString,
         IsOptional,
         ValidateNested,
         Min,
-        Max
+        Max,
+        IsInt
 } from 'class-validator';
 import {Type } from 'class-transformer';
 import { AusstattungDTO } from "../resolver/ausstattungDTO.js";
-import { MarkeDTO } from "../resolver/markeDTO.js";
 
 /**
  * Entity-Klasse für Autos ohne TypeORM und ohne Referenzen.
@@ -56,6 +56,8 @@ export class AutoDTO extends AutoDtoOhneRef {
     @ApiProperty({ type: [AusstattungDTO]})
     readonly ausstattung! : AusstattungDTO;
 
-    @ApiProperty({ type: [MarkeDTO]})
-    readonly marke!: MarkeDTO;
-}
+    @IsInt()
+    @Type(() => Number)
+    @ApiProperty({ example: 1, description: 'ID der Marke' })
+    readonly markeId!: number;
+  }
