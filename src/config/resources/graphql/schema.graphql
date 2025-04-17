@@ -89,7 +89,7 @@ input AutoInput {
 
 "Daten für ein zu änderndes Auto"
 input AutoUpdateInput {
-    id: Int
+    id: String
     version: Int
     bezeichnung: String
     fahrgestellnummer: String

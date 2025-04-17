@@ -181,35 +181,32 @@ export class AutoWriteService {
      * @param id ID des zu löschenden Autos
      * @returns true, falls das Auto vorhanden war und gelöscht wurde
      */
-    async delete(id:number) : Promise<boolean> {
-        this.#logger.debug('delete: id=%d', id)
-        const auto : Readonly<Auto> = await this.#readService.findById({
+    async delete(id: number): Promise<boolean> {
+        this.#logger.debug('delete: id=%d', id);
+    
+        const auto: Readonly<Auto> = await this.#readService.findById({
             id,
-            mitMarke : true,
+            mitMarke: true,
         });
-
-        let deleteResult : DeleteResult | undefined;
-        await this.#repo.manager.transaction(async (transactionMgr : EntityManager) :Promise<void> => {
-
-            const ausstattungId : number | undefined = auto.ausstattung?.id;
-            if(ausstattungId !== undefined){
-                await transactionMgr.delete(Ausstattung, ausstattungId)
-            }
-
-            const markeId : number | undefined = auto.marke?.id;
-            if(markeId !== undefined){
-                await transactionMgr.delete(Marke, markeId)
-            }
-        
+    
+        let deleteResult: DeleteResult | undefined;
+    
+        // Beginne eine Transaktion, um sicherzustellen, dass keine ungewollten Änderungen passieren
+        await this.#repo.manager.transaction(async (transactionMgr: EntityManager): Promise<void> => {
+            // Lösche zuerst die Ausstattung, falls vorhanden
+            const ausstattungId: number | undefined = auto.ausstattung?.id;
+            if (ausstattungId !== undefined) {
+                await transactionMgr.delete(Ausstattung, ausstattungId);
+            }    
+            // Lösche nur das Auto
             deleteResult = await transactionMgr.delete(Auto, id);
-            this.#logger.debug('dekete: deleteResult=%o', deleteResult)
+            this.#logger.debug('delete: deleteResult=%o', deleteResult);
         });
-
-        return(
-            deleteResult?.affected !== undefined &&
-            deleteResult.affected !== null &&
-            deleteResult.affected > 0
-        );
+    
+        // Rückgabe, ob das Auto erfolgreich gelöscht wurde
+        return deleteResult?.affected !== undefined &&
+               deleteResult.affected !== null &&
+               deleteResult.affected > 0;
     }
     
 
