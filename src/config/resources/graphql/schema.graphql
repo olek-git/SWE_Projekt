@@ -64,6 +64,7 @@ input SuchkriterienInput {
     fahrgestellnummer: String
     ps: Int
     marke: String
+    getriebeart : Art
 }
 
 "Daten zur Ausstattun eines neuen Autos"

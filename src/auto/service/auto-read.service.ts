@@ -109,7 +109,7 @@ export class AutoReadService {
         pageable : Pageable,
     ): Promise<Slice<Auto>> {
         this.#logger.debug(
-            'find: suchkriterien:%s, pageable=%o',
+            'find: suchkriterien:%o, pageable=%o',
             suchkriterien,
             pageable,
         );

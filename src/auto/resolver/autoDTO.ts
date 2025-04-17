@@ -9,7 +9,9 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsString, 
         Matches,
         IsOptional,
-        ValidateNested
+        ValidateNested,
+        Min,
+        Max
 } from 'class-validator';
 import {Type } from 'class-transformer';
 import { AusstattungDTO } from "../resolver/ausstattungDTO.js";
@@ -29,9 +31,8 @@ export class AutoDtoOhneRef {
     @ApiProperty({example: 'WVWZZZ1JZXW000001', type: String})
     readonly fahrgestellnummer! : string
 
-    @Matches(/^\d{4}$/, {
-        message: 'Baujahr muss genau 4 Ziffern enthalten.'
-    })
+    @Min(1886) // Erstes Auto :)
+    @Max(new Date().getFullYear())
     @ApiProperty({example: 1999, type: Number})
     readonly baujahr! : number;
 
@@ -55,8 +56,6 @@ export class AutoDTO extends AutoDtoOhneRef {
     @ApiProperty({ type: [AusstattungDTO]})
     readonly ausstattung! : AusstattungDTO;
 
-    @ValidateNested()
-    @Type(() => MarkeDTO)
     @ApiProperty({ type: [MarkeDTO]})
     readonly marke!: MarkeDTO;
 }

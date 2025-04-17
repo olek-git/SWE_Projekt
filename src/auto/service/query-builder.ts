@@ -125,7 +125,7 @@ export class QueryBuilder{
         if (ps !== undefined) {
             const psNumber : number = 
                 typeof ps === 'string' ? parseInt(ps) : ps;
-            if (isNaN(psNumber)) {
+            if (!isNaN(psNumber)) {  // Hier prüfen wir, dass psNumber gültig ist
                 queryBuilder = queryBuilder.where(
                     `${this.#autoAlias}.ps >= ${psNumber}`,
                 );
