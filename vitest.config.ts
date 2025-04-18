@@ -14,18 +14,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 // https://vitest.dev/config
 export default defineConfig({
     test: {
         name: 'Beispiel',
          // default ist ['**\/*.{test,spec}.?(c|m)[jt]s?(x)']
-        include: ['test/**/*.test.mts'],
+        include: ['__tests__/**/*.test.{ts,mts}'],
         globals: true,
         environment: 'node',
         // https://vitest.dev/config/#globalsetup
-        globalSetup: './test/setup.global.mts',
+        globalSetup: './__tests__/setup.global.mts',
         testTimeout: 10_000,
         // https://vitest.dev/guide/coverage
         // https://vitest.dev/config/#coverage

@@ -1,8 +1,8 @@
 {
-  "name": "buch",
+  "name": "auto",
   "version": "2025.4.1",
   "description": "Beispiel",
-  "author": "Juergen Zimmermann",
+  "author": "Marek Lamb",
   "private": true,
   "license": "GPL-3.0",
   "exports": "./dist/src/main.js",

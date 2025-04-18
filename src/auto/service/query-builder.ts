@@ -111,12 +111,15 @@ export class QueryBuilder{
         //Marke in der Query: Teilstring der Marke und "case insensitive" 
         //type-coverage: ignore-next-line
 
-        if(marke !== undefined && typeof marke === 'string') {
+        if(bezeichnung !== undefined && typeof bezeichnung === 'string') {
             const ilike = 
                 typeOrmModuleOptions.type === 'postgres' ? 'ilike' : 'like';
+
+            const likeValue = `%${bezeichnung}%`;
+                
             queryBuilder = queryBuilder.where(
-                `${this.#markeAlias}.name ${ilike} :marke`,
-                {marke: `%${marke}%`},
+                `${this.#autoAlias}.bezeichnung ${ilike} :bezeichnung`,
+                { bezeichnung: likeValue }
             );
             useWhere = false;
 
