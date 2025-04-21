@@ -1,0 +1,15 @@
+@startuml Sequenzdiagramm
+
+actor Gast
+
+boundary AutoResolver
+control AutoReadService
+database auto
+
+Gast -> AutoResolver : query { buch(id: ...) }
+AutoResolver -> AutoReadService : findById()
+AutoReadService -> auto : [TypeORM]
+
+footer (c) Marek Lamb
+
+@enduml

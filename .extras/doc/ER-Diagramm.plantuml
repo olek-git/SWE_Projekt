@@ -1,0 +1,45 @@
+@startuml ER Diagramm
+
+hide circle
+
+skinparam linetype ortho
+
+entity "Auto" {
+    * id: integer <<generated>>
+    --
+    * version: integer
+    * bezeichnung: text
+    * fahrgestellnummer: text
+    * baujahr: integer
+    * ps: integer
+    * neuKaufpreis: integer
+    * maxGeschwindigkeit: integer
+    * **austattung_id** : integer <<FK>> 
+    * **marke_id** : integer <<FK>> 
+    * erzeugt: timestamp
+    * aktualisiert: timestamp
+}
+
+entity "Ausstattung" {
+    * id: integer <<generated>>
+    --
+    * klimaanlage: boolean
+    * sitzheizung: boolean
+    * getriebe: text
+    *innenraummaterial: text
+}
+
+entity "Marke" {
+    * id: integer 
+    --
+    * name: text
+    *gruendungsjahr: integer
+    *gruender: text
+}
+
+Auto ||..|| Ausstattung
+Auto ||..o{ Marke
+
+footer (c) Marek Lamb
+
+@enduml

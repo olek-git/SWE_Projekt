@@ -1,0 +1,64 @@
+@startuml Entity
+
+package typeorm {
+  class "@Entity" as Entity
+  hide Entity circle
+  class "@Column" as Column
+  hide Column circle
+  class "@PrimaryColumn" as PrimaryColumn
+  hide PrimaryColumn circle
+  class "@OneToMany" as OneToMany
+  hide OneToMany circle
+  class "@JoinColumn" as JoinColumn
+  hide JoinColumn circle
+  class "@ManyToOne" as ManyToOne
+  hide ManyToOne circle
+  class "@CreateDateColumn" as CreateDateColumn
+  hide CreateDateColumn circle
+  class "@UpdateDateColumn" as UpdateDateColumn
+  hide UpdateDateColumn circle
+}
+
+package auto.entity {
+    class Buch <<entity>> <<@Entity>> {
+        @Column() @PrimaryColumn() readonly id: number
+        @Column() readonly version: number
+        @Column() readonly bezeichnung: string
+        @Column() readonly fahrgestellnummer: string
+        @Column() readonly baujahr: number
+        @Column() readonly ps: number
+        @Column() readonly neuKaufpreis number
+        @Column() readonly maxGeschwindigkeit: number
+        @CreateDateColumn() readonly erzeugt: Date
+        @UpdateDateColumn() readonly aktualisiert: Date
+
+    }
+
+    class "type getriebeArt = 'MANUELL' | 'AUTOMATIK'" as getriebeArt
+    hide getriebeArt circle
+
+
+    class Ausstattung <<entity>> <<@Entity>> {
+        @Column() @PrimaryColumn() readonly id: number
+        @Column() readonly klimaanlage: boolean
+        @Column() readonly sitzheizung: boolean
+        @Column() readonly getriebe: getriebeArt
+        @Column() readonly innenraummaterial: string
+    }
+
+    class Marke <<entity>> <<@Entity>> {
+        @Column() @PrimaryColumn() readonly id: number
+        @Column() readonly name: string
+        @Column() readonly gruendungsjahr: number
+        @Column() readonly gruender: string
+    }
+
+    Auto *--> "1" Ausstattung : @OneToOne() \nausstattung
+    Marke *--> "*" Auto : @OneToMany() \nautos
+}
+
+hide empty members
+
+footer (c) Marek Lamb
+
+@enduml

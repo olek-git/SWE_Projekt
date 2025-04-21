@@ -1,0 +1,20 @@
+@startuml Use Cases
+
+actor Gast
+actor Admin
+actor Kunde
+
+rectangle buch {
+    Gast --> (Auto suchen)
+    Admin --> (Auto suchen)
+    Admin --> (Auto anlegen)
+    Admin --> (Auto ändern)
+    Admin --> (Auto löschen)
+    Kunde --> (Auto suchen)
+    Kunde --> (Auto anlegen)
+    Kunde --> (Auto ändern)
+}
+
+footer (c) Marek Lamb
+
+@enduml

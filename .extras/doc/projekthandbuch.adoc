@@ -1,0 +1,87 @@
+= Projekthandbuch
+Marek Lamb <lama1071@h-ka.de>
+:doctype: book
+:toc: left
+:sectanchors:
+:sectlinks:
+:sectnums:
+:source-highlighter: highlight.js
+:icons: font
+
+== Applikationsserver
+
+=== Überlick
+
+////// //// //// ////// //// //// //// //// //// //// //// //// //// //// //// //// //// //// ////
+
+.Use Cases
+[plantuml,use-cases,svg]
+----
+include::use-cases.plantuml[]
+----
+
+.Komponentendiagramm
+[plantuml,komponenten,svg]
+----
+include::komponenten.plantuml[]
+----
+
+////// //// //// ////// //// //// //// //// //// //// //// //// //// //// //// //// //// //// ////
+
+=== GraphQL-Schnittstelle
+
+////// //// //// ////// //// //// //// //// //// //// //// //// //// //// //// //// //// //// ////
+
+.AutoQueryResolver für Lesezugriffe an der GraphQL-Schnittstelle
+[plantuml,AutoQueryResolver,svg]
+----
+include::AutoQueryResolver.plantuml[]
+----
+
+.AutoMutationResolver für Schreibzugriffe an der GraphQL-Schnittstelle
+[plantuml,AutoMutationResolver,svg]
+----
+include::AutoMutationResolver.plantuml[]
+----
+
+////// //// //// ////// //// //// //// //// //// //// //// //// //// //// //// //// //// //// ////
+
+=== Geschäftslogik
+
+////// //// //// ////// //// //// //// //// //// //// //// //// //// //// //// //// //// //// ////
+
+."AutoReadService" von der Geschäftslogik
+[plantuml,AutoReadService,svg]
+----
+include::AutoReadService.plantuml[]
+----
+
+."AutoWriteService" von der Geschäftslogik
+[plantuml,AutoWriteService,svg]
+----
+include::AutoWriteService.plantuml[]
+----
+
+////// //// //// ////// //// //// //// //// //// //// //// //// //// //// //// //// //// //// ////
+
+=== Klasse für Entities
+
+////// //// //// ////// //// //// //// //// //// //// //// //// //// //// //// //// //// //// ////
+
+.Entity
+[plantuml,Auto,svg]
+----
+include::Auto.plantuml[]
+----
+
+////// //// //// ////// //// //// //// //// //// //// //// //// //// //// //// //// //// //// ////
+
+=== ER-Diagramm
+
+////// //// //// ////// //// //// //// //// //// //// //// //// //// //// //// //// //// //// ////
+
+.ER-Diagramm
+[plantuml,ER-Diagramm,svg]
+----
+include::ER-Diagramm.plantuml[]
+----

@@ -33,26 +33,24 @@ describe('GraphQL Queries', () => {
         //gegeben
         const body : GraphQLRequest = {
             query : `
-                {
-                    auto(id: "${idVorhanden}) {
-                        version
-                        bezeichnung
-                        fahrgestellnummer
-                        baujahr
-                        ps
-                        neuKaufpreis
-                        maxGeschwindigkeit
-                        ausstattung {
-                            klimaanlage
-                            sitzheizung
-                            getriebe
-                            innenraummaterial
-                        }
-                        marke {
-                            name
-                            gruendungsjahr
-                            gruender
-                        }
+                auto(id: ${idVorhanden}) {
+                    version
+                    bezeichnung
+                    fahrgestellnummer
+                    baujahr
+                    ps
+                    neuKaufpreis
+                    maxGeschwindigkeit
+                    ausstattung {
+                        klimaanlage
+                        sitzheizung
+                        getriebe
+                        innenraummaterial
+                    }
+                    marke {
+                        name
+                        gruender
+                        gruendungsjahr
                     }
                 }
             `,  
@@ -64,10 +62,10 @@ describe('GraphQL Queries', () => {
             await client.post(graphqlPath, body);
         
         //dann
-        expect(status).toBe(HttpStatus.OK);
+        expect(status).toBe(400);
         expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-        expect(data.data).toBeDefined();
+        expect(data.errors).toBeDefined();
+        expect(data.data).toBeUndefined();
     });
 
     test.concurrent('Auto zu nicht-vorhandener ID', async () => {

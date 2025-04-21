@@ -1,0 +1,69 @@
+@startuml Komponenten
+
+left to right direction
+
+actor GraphQLClient
+
+node "Nest" {
+  [RequestLoggerMiddleware]
+
+  [AutoResolver]
+
+  [AutoService]
+
+  [Repository<Auto>]
+
+  [MailService]
+}
+
+
+cloud {
+    [TypeORM]
+}
+
+cloud {
+    [nest-keycloak-connect]
+}
+
+cloud {
+    [nodemailer]
+}
+
+database "DB auto" {
+    [Tabelle auto]
+    [Tabelle ausstattung]
+    [Tabelle marke]
+}
+
+node {
+    [Keycloak]
+}
+
+node {
+    [Mailserver]
+}
+
+RESTClient ~~> [RequestLoggerMiddleware]
+GraphQLClient ~~> [RequestLoggerMiddleware]
+
+[RequestLoggerMiddleware] ~~> [AutoResolver]
+
+[AutoResolver] ..> [AutoService]
+[AutoService] ..> [Repository<Auto>]
+
+[Repository<Auto>] ~~> [TypeORM]
+[TypeORM] ~~> [Tabelle auto]
+[TypeORM] ~~> [Tabelle ausstattung]
+[TypeORM] ~~> [Tabelle marke]
+
+[nest-keycloak-connect] ~~> [Keycloak]
+
+[AutoService] ..> [MailService]
+[MailService] ~~> [nodemailer]
+[nodemailer] ~~> [Mailserver]
+
+[MailService] ~[hidden]~> [nest-keycloak-connect]
+
+footer (c) Marke Lamb
+
+@enduml
