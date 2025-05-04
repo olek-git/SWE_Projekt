@@ -29,7 +29,7 @@ export type UpdateParams = {
     readonly auto: Auto;
     /** Versionsnummer für die aktualisierenden Werte. */
     readonly version: string;
-}
+};
 
 /**
  * Die Klasse `AutoWriteService` implementiert den Anwendungskern für das
@@ -47,9 +47,9 @@ export class AutoWriteService {
 
     readonly #mailService: MailService;
 
-    readonly #logger = getLogger(AutoWriteService.name); 
+    readonly #logger = getLogger(AutoWriteService.name);
 
-    readonly #markeRepository : Repository<Marke>;
+    readonly #markeRepository: Repository<Marke>;
 
     constructor(
         @InjectRepository(Auto) repo: Repository<Auto>,
@@ -70,28 +70,30 @@ export class AutoWriteService {
      * @param auto Das neu abzulegende Auto
      * @returns Die ID des neu angelegten Autos
      */
-   async create(auto: Auto) {
-    this.#logger.debug('create: auto=%o', auto);
-    await this.#validateCreate(auto);
+    async create(auto: Auto) {
+        this.#logger.debug('create: auto=%o', auto);
+        await this.#validateCreate(auto);
 
-    // Marke anhand der ID aus der Datenbank laden
-    const markeId = auto.marke?.id;
-    if (!markeId) {
-        throw new Error('Marken-ID muss angegeben werden');
-    }
+        // Marke anhand der ID aus der Datenbank laden
+        const markeId = auto.marke?.id;
+        if (!markeId) {
+            throw new Error('Marken-ID muss angegeben werden');
+        }
 
-    const marke = await this.#markeRepository.findOne({ where: { id: markeId } });
-    if (!marke) {
-        throw new Error(`Marke mit ID ${markeId} nicht gefunden`);
-    }
+        const marke = await this.#markeRepository.findOne({
+            where: { id: markeId },
+        });
+        if (!marke) {
+            throw new Error(`Marke mit ID ${markeId} nicht gefunden`);
+        }
 
-    // Marke zuweisen (nur Referenz, kein neues Objekt)
-    auto.marke = marke;
+        // Marke zuweisen (nur Referenz, kein neues Objekt)
+        auto.marke = marke;
 
-    const autoDb = await this.#repo.save(auto); // implizite Transaktion
-    await this.#sendmail(autoDb);
+        const autoDb = await this.#repo.save(auto); // implizite Transaktion
+        await this.#sendmail(autoDb);
 
-    return autoDb.id!;
+        return autoDb.id!;
     }
     /**
      * Zu einem vorhandenen Auto eine Binärdatei mit z.B. einem Bild abspeichern.
@@ -149,29 +151,33 @@ export class AutoWriteService {
      * @throws VersionInvalidException falls die Versionsnummer ungültig ist
      * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
      */
-    async update({ id, auto, version} : UpdateParams){
+    async update({ id, auto, version }: UpdateParams) {
         this.#logger.debug(
             'update: id=%d, auto=%o, version=%s',
             id,
             auto,
-            version
+            version,
         );
-        if(id === undefined) {
+        if (id === undefined) {
             this.#logger.debug('update: Keine gültige ID');
-            throw new NotFoundException(`Es gibt kein Auto mit der ID ${id}`)
+            throw new NotFoundException(`Es gibt kein Auto mit der ID ${id}`);
         }
 
-        const validateResult : Auto = await this.#validateUpdate(auto, id, version);
+        const validateResult: Auto = await this.#validateUpdate(
+            auto,
+            id,
+            version,
+        );
         this.#logger.debug('update: validateResult=%o', validateResult);
-        if(!(validateResult instanceof Auto)) {
+        if (!(validateResult instanceof Auto)) {
             return validateResult;
         }
 
-        const autoNeu : Auto = validateResult;
-        const merged : Auto = this.#repo.merge(autoNeu, auto);
+        const autoNeu: Auto = validateResult;
+        const merged: Auto = this.#repo.merge(autoNeu, auto);
         this.#logger.debug('update: merged=%o', merged);
-        const updated : Auto = await this.#repo.save(merged);
-        this.#logger.debug('update: updated=%o', updated)
+        const updated: Auto = await this.#repo.save(merged);
+        this.#logger.debug('update: updated=%o', updated);
 
         return updated.version!;
     }
@@ -183,44 +189,49 @@ export class AutoWriteService {
      */
     async delete(id: number): Promise<boolean> {
         this.#logger.debug('delete: id=%d', id);
-    
+
         const auto: Readonly<Auto> = await this.#readService.findById({
             id,
             mitMarke: true,
         });
-    
-        let deleteResult: DeleteResult | undefined;
-    
-        // Beginne eine Transaktion, um sicherzustellen, dass keine ungewollten Änderungen passieren
-        await this.#repo.manager.transaction(async (transactionMgr: EntityManager): Promise<void> => {
-            // Lösche zuerst die Ausstattung, falls vorhanden
-            const ausstattungId: number | undefined = auto.ausstattung?.id;
-            if (ausstattungId !== undefined) {
-                await transactionMgr.delete(Ausstattung, ausstattungId);
-            }    
-            // Lösche nur das Auto
-            deleteResult = await transactionMgr.delete(Auto, id);
-            this.#logger.debug('delete: deleteResult=%o', deleteResult);
-        });
-    
-        // Rückgabe, ob das Auto erfolgreich gelöscht wurde
-        return deleteResult?.affected !== undefined &&
-               deleteResult.affected !== null &&
-               deleteResult.affected > 0;
-    }
-    
 
+        let deleteResult: DeleteResult | undefined;
+
+        // Beginne eine Transaktion, um sicherzustellen, dass keine ungewollten Änderungen passieren
+        await this.#repo.manager.transaction(
+            async (transactionMgr: EntityManager): Promise<void> => {
+                // Lösche zuerst die Ausstattung, falls vorhanden
+                const ausstattungId: number | undefined = auto.ausstattung?.id;
+                if (ausstattungId !== undefined) {
+                    await transactionMgr.delete(Ausstattung, ausstattungId);
+                }
+                // Lösche nur das Auto
+                deleteResult = await transactionMgr.delete(Auto, id);
+                this.#logger.debug('delete: deleteResult=%o', deleteResult);
+            },
+        );
+
+        // Rückgabe, ob das Auto erfolgreich gelöscht wurde
+        return (
+            deleteResult?.affected !== undefined &&
+            deleteResult.affected !== null &&
+            deleteResult.affected > 0
+        );
+    }
 
     async #validateCreate({ fahrgestellnummer }: Auto): Promise<undefined> {
-        this.#logger.debug('#validateCreate: fahrgestellnummer=%s', fahrgestellnummer);
-        if (await this.#repo.existsBy({ fahrgestellnummer})) {
+        this.#logger.debug(
+            '#validateCreate: fahrgestellnummer=%s',
+            fahrgestellnummer,
+        );
+        if (await this.#repo.existsBy({ fahrgestellnummer })) {
             throw new FahrgestellnummerExistsException(fahrgestellnummer);
         }
     }
 
     async #sendmail(auto: Auto) {
         const subject = `Neues Auto ${auto.id}`;
-        const bezeichnung = auto.bezeichnung
+        const bezeichnung = auto.bezeichnung;
         const body = `Das Auto mit der Bezeichnung <strong>${bezeichnung}</strong> ist angelegt`;
         await this.#mailService.sendmail({ subject, body });
     }

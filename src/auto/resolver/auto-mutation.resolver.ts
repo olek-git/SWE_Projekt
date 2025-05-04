@@ -1,6 +1,6 @@
 import { UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { IsInt, IsNumberString, Min } from 'class-validator';// eslint-disable-line @typescript-eslint/naming-convention
+import { IsInt, IsNumberString, Min } from 'class-validator'; // eslint-disable-line @typescript-eslint/naming-convention
 import { AuthGuard, Roles } from 'nest-keycloak-connect';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
@@ -9,20 +9,19 @@ import { AutoDTO } from './autoDTO.js';
 import { AutoWriteService } from '../service/auto.write.service.js';
 import { Auto } from '../entity/auto.entity.js';
 import { Ausstattung } from '../entity/ausstattung.entity.js';
-import { CreatePayload } from '../../../../BuchV1/dist/buch/resolver/buch-mutation.resolver.js';
 import { IdInput } from './auto.query.resolver.js';
 
 export type createPayload = {
     readonly id: number;
-}
+};
 
 export type UpdatePayload = {
     readonly version: number;
-}
+};
 
 export class AutoUpdateDTO extends AutoDTO {
     @IsNumberString()
-    readonly id! : string
+    readonly id!: string;
 
     @IsInt()
     @Min(0)
@@ -44,25 +43,25 @@ export class AutoMutationResolver {
 
     @Mutation()
     @Roles('admin', 'user')
-    async create(@Args('input') autoDTO: AutoDTO): Promise<CreatePayload> {
+    async create(@Args('input') autoDTO: AutoDTO): Promise<createPayload> {
         this.#logger.debug('create: autoDTO=%o', autoDTO);
 
-    // DTO in Entity umwandeln
-    const auto = this.#autoDtoToAuto(autoDTO);
+        // DTO in Entity umwandeln
+        const auto = this.#autoDtoToAuto(autoDTO);
 
-    // Übergib das Auto an den Service
-    const id = await this.#service.create(auto);
+        // Übergib das Auto an den Service
+        const id = await this.#service.create(auto);
 
-    this.#logger.debug('createAuto: id=%d', id);
+        this.#logger.debug('createAuto: id=%d', id);
 
-    return { id };
+        return { id };
     }
 
     @Mutation()
     @Roles('admin', 'user')
     async update(@Args('input') autoDTO: AutoUpdateDTO) {
         this.#logger.debug('update: auto=%o', autoDTO);
-           
+
         const auto = this.#autoUpdateDtoToAuto(autoDTO);
         const versionStr = `"${autoDTO.version.toString()}"`;
 
@@ -95,7 +94,7 @@ export class AutoMutationResolver {
             innenraummaterial: ausstattungDTO.innenraummaterial,
             auto: undefined,
         };
-    
+
         const auto: Auto = {
             id: undefined,
             version: undefined,
@@ -111,9 +110,9 @@ export class AutoMutationResolver {
             erzeugt: new Date(),
             aktualisiert: new Date(),
         };
-    
+
         ausstattung.auto = auto;
-    
+
         return auto;
     }
 
@@ -132,6 +131,6 @@ export class AutoMutationResolver {
             ausstattung: undefined,
             erzeugt: new Date(),
             aktualisiert: new Date(),
-        }
+        };
     }
 }

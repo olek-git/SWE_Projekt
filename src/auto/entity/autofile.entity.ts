@@ -1,14 +1,15 @@
-import { Entity,
-        OneToOne,
-        JoinColumn,
-        PrimaryGeneratedColumn,
-        Column
- } from "typeorm";
-import {Auto} from './auto.entity.js';
+import {
+    Entity,
+    OneToOne,
+    JoinColumn,
+    PrimaryGeneratedColumn,
+    Column,
+} from 'typeorm';
+import { Auto } from './auto.entity.js';
 import { binaryType } from '../../config/db.js';
 
 @Entity()
-export class AutoFile{
+export class AutoFile {
     @PrimaryGeneratedColumn()
     id: number | undefined;
 

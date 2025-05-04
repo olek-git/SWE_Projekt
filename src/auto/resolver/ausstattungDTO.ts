@@ -4,10 +4,7 @@
  */
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean,
-         IsOptional ,
-         Matches 
-} from 'class-validator';
+import { IsBoolean, IsOptional, Matches } from 'class-validator';
 import { getriebeArt } from '../entity/ausstattung.entity.js';
 
 /**
@@ -16,19 +13,19 @@ import { getriebeArt } from '../entity/ausstattung.entity.js';
 export class AusstattungDTO {
     @IsBoolean()
     @IsOptional()
-    @ApiProperty({example: true, type: Boolean})
-    readonly klimaanlage! : boolean | undefined;
+    @ApiProperty({ example: true, type: Boolean })
+    readonly klimaanlage!: boolean | undefined;
 
     @IsBoolean()
     @IsOptional()
-    @ApiProperty({example: false, type: Boolean})
-    readonly sitzheizung! : boolean | undefined;
+    @ApiProperty({ example: false, type: Boolean })
+    readonly sitzheizung!: boolean | undefined;
 
     @Matches(/^(AUTOMATIK|MANUELL)$/u)
-    @ApiProperty({example: 'AUTOMATIK' , type: String})
-    readonly getriebe! : getriebeArt;
+    @ApiProperty({ example: 'AUTOMATIK', type: String })
+    readonly getriebe!: getriebeArt;
 
-    @ApiProperty({example: "leder", type: String})
-    readonly innenraummaterial! : string;
+    @ApiProperty({ example: 'leder', type: String })
+    readonly innenraummaterial!: string;
 }
 /* eslint-enable @typescript-eslint/no-magic-numbers */

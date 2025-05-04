@@ -22,7 +22,7 @@ package @nestjs/graphql {
 package nest-keycloak-connect {
   class AuthGuard
 
-  class "@Roles" as Roles
+  class "Roles" as Roles
   hide Roles circle
 }
 
@@ -30,10 +30,10 @@ package autorgb(255, 139, 139) {
   package entity #FFFFFF {
     class Auto <<entity>>
   }
-
+}
 package servicergb(255, 139, 139) {
     class BuchWriteService << control >>
-  }
+}
 
 class "type AutoDTO = Omit<Auto, 'marke' | 'aktualisiert' | 'erzeugt'" as AutoDTO
 hide AutoDTO circle
@@ -53,7 +53,7 @@ AutoMutationResolver o-down-> "1" AutoWriteService : service
   AutoMutationResolver ..> Auto
   AutoMutationResolver ..> AutoDTO
   AutoMutationResolver ..> IdInput
- AutoDTO .up.> Auto
+  AutoDTO .up.> Auto
   AutoMutationResolver ..> Promise
   AutoMutationResolver ..> Resolver
 
@@ -62,7 +62,7 @@ AutoMutationResolver o-down-> "1" AutoWriteService : service
 
   AutoDTO .[hidden].> Promise
   AutoDTO .[hidden].> Resolver
-}
+
 
 hide empty members
 

@@ -7,11 +7,11 @@ import { getriebeArt } from '../../../src/auto/entity/ausstattung.entity.js';
 /**
  * Typdefinition für `find` in `auto-read.service` und `QueryBuilder.build()`.
  */
-export interface Suchkriterien{
-    readonly bezeichnung? : string;
-    readonly baujahr? : number;
-    readonly ps? : number;
-    readonly maxGeschwindigkeit? : number;
-    readonly marke? : string;
-    readonly getriebeArt? : getriebeArt
+export interface Suchkriterien {
+    readonly bezeichnung?: string;
+    readonly baujahr?: number;
+    readonly ps?: number;
+    readonly maxGeschwindigkeit?: number;
+    readonly marke?: string;
+    readonly getriebeArt?: getriebeArt;
 }

@@ -1,5 +1,5 @@
 import { type Suchkriterien } from '../service/suchkriterien.js';
-import { HttpExceptionFilter } from './http-exception.filter.js'; 
+import { HttpExceptionFilter } from './http-exception.filter.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { UseInterceptors, UseFilters } from '@nestjs/common';
 import { AutoReadService } from '../service/auto-read.service.js';
@@ -14,7 +14,7 @@ export type IdInput = {
 
 export type SuchkriterienInput = {
     readonly suchkriterien: Suchkriterien;
-}
+};
 
 @Resolver('Auto')
 @UseFilters(HttpExceptionFilter)
@@ -27,20 +27,20 @@ export class AutoQueryResolver {
     constructor(service: AutoReadService) {
         this.#service = service;
     }
-    
+
     @Query('auto')
     @Public()
     async findById(@Args() { id }: IdInput) {
         this.#logger.debug('findById: id=%d', id);
-        const auto = await this.#service.findById({id});
+        const auto = await this.#service.findById({ id });
 
-        if(this.#logger.isLevelEnabled('debug')) {
+        if (this.#logger.isLevelEnabled('debug')) {
             this.#logger.debug(
                 'findById: auto=%s, ausstattung=%o, marke=%r',
                 auto.toString(),
                 auto.marke,
-                auto.ausstattung
-            )
+                auto.ausstattung,
+            );
         }
         return auto;
     }

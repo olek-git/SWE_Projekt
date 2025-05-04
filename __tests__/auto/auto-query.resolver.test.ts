@@ -13,26 +13,25 @@ const bezeichnungVorhanden = 'Porsche Panamera';
 const teilBezeichnungVorhanden = 'Mercedes';
 const teilBezeichnungNichtVorhanden = 'Mustang';
 
-
 // T E S T S
 describe('GraphQL Queries', () => {
-    let client : AxiosInstance;
+    let client: AxiosInstance;
     const graphqlPath = 'graphql';
 
     //Axios einlesen
     beforeAll(async () => {
         const baseUrlGraphQL = `${baseURL}/`;
         client = axios.create({
-            baseURL : baseUrlGraphQL,
+            baseURL: baseUrlGraphQL,
             httpsAgent,
-            validateStatus: () => true
+            validateStatus: () => true,
         });
     });
 
     test.concurrent('Auto zu vorhandener ID', async () => {
         //gegeben
-        const body : GraphQLRequest = {
-            query : `
+        const body: GraphQLRequest = {
+            query: `
                 auto(id: ${idVorhanden}) {
                     version
                     bezeichnung
@@ -53,14 +52,14 @@ describe('GraphQL Queries', () => {
                         gruendungsjahr
                     }
                 }
-            `,  
+            `,
         };
 
         //wenn
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
             await client.post(graphqlPath, body);
-        
+
         //dann
         expect(status).toBe(400);
         expect(headers['content-type']).toMatch(/json/iu);
@@ -70,7 +69,7 @@ describe('GraphQL Queries', () => {
 
     test.concurrent('Auto zu nicht-vorhandener ID', async () => {
         //gegeben
-        const id = '777777'
+        const id = '777777';
         const body: GraphQLRequest = {
             query: `
                 {
@@ -111,7 +110,7 @@ describe('GraphQL Queries', () => {
 
     test.concurrent('Auto zu vorhandener Bezeichnung', async () => {
         //gegeben
-        const body : GraphQLRequest = {
+        const body: GraphQLRequest = {
             query: `
                 {
                     autos(suchkriterien: {
@@ -135,18 +134,18 @@ describe('GraphQL Queries', () => {
         expect(data.data).toBeDefined();
 
         const { autos } = data.data! as { autos: AutoDTO[] };
-        
+
         expect(autos).not.toHaveLength(0);
         expect(autos).toHaveLength(1);
 
         const [auto] = autos;
-        
+
         expect(auto!.bezeichnung).toBe(bezeichnungVorhanden);
     });
 
     test.concurrent('Auto zu vorhandener Teil-Bezeichnung', async () => {
         //gegeben
-        const body : GraphQLRequest = {
+        const body: GraphQLRequest = {
             query: `
                 {
                     autos(suchkriterien: {
@@ -170,7 +169,7 @@ describe('GraphQL Queries', () => {
         expect(data.data).toBeDefined();
 
         const { autos } = data.data! as { autos: AutoDTO[] };
-        
+
         expect(autos).not.toHaveLength(0);
         autos
             .map((auto) => auto.bezeichnung)
@@ -180,10 +179,10 @@ describe('GraphQL Queries', () => {
                 ),
             );
     });
-    
+
     test.concurrent('Auto zu nicht vorhandener Bezeichnung', async () => {
         //gegeben
-        const body : GraphQLRequest = {
+        const body: GraphQLRequest = {
             query: `
                 {
                     autos(suchkriterien: {
@@ -199,7 +198,7 @@ describe('GraphQL Queries', () => {
         //wenn
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
             await client.post(graphqlPath, body);
-        
+
         //dann
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
@@ -218,4 +217,4 @@ describe('GraphQL Queries', () => {
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
-})
+});

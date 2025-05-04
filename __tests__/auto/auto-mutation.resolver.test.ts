@@ -51,7 +51,7 @@ describe('GraphQL Mutations', () => {
                         id
                     }
                 }
-            `
+            `,
         };
 
         //wenn
@@ -107,7 +107,7 @@ describe('GraphQL Mutations', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data!.create).toBeNull();
-        
+
         const { errors } = data;
 
         expect(errors).toHaveLength(1);
@@ -201,7 +201,7 @@ describe('GraphQL Mutations', () => {
     test('Auto mit nicht vorhandener ID aktualisieren', async () => {
         //gegeben
         const authorization = { Authorization: `Bearer ${token}` };
-        const id = '7777777'
+        const id = '7777777';
         const body: GraphQLQuery = {
             query: `
                 mutation{

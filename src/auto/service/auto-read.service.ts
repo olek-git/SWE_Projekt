@@ -4,7 +4,7 @@
  */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository} from 'typeorm';
+import { Repository } from 'typeorm';
 import { getLogger } from '../../logger/logger.js';
 import { type Pageable } from './pageable.js';
 import { type Slice } from './slice.js';
@@ -52,19 +52,17 @@ export class AutoReadService {
      * @returns Das gefundene Buch in einem Promise aus ES2015.
      * @throws NotFoundException falls kein Buch mit der ID existiert
      */
-    async findById({
-        id,
-    }: FindByIdParams): Promise<Readonly<Auto>>{
-        this.#logger.debug('findById: id=%d', id)
-        
-        const auto : Auto | null = await this.#queryBuilder
+    async findById({ id }: FindByIdParams): Promise<Readonly<Auto>> {
+        this.#logger.debug('findById: id=%d', id);
+
+        const auto: Auto | null = await this.#queryBuilder
             .buildId({ id })
             .getOne();
-        if(auto === null){
+        if (auto === null) {
             throw new NotFoundException(`Es gibt kein Auto mit der ID ${id}.`);
         }
 
-        if(this.#logger.isLevelEnabled('debug')) {
+        if (this.#logger.isLevelEnabled('debug')) {
             this.#logger.debug(
                 '#findById: auto=%satisfies, ausstattung=%o',
                 auto.toString,
@@ -81,18 +79,18 @@ export class AutoReadService {
      * @returns Binärdatei oder undefined als Promise.
      */
     async findFileByAutoId(
-        autoId : number,
-    ): Promise<Readonly<AutoFile> | undefined>{
+        autoId: number,
+    ): Promise<Readonly<AutoFile> | undefined> {
         this.#logger.debug('findFileByAutoId: autoId=%s', autoId);
-        const autoFile : AutoFile | null = await this.#fileRepo
+        const autoFile: AutoFile | null = await this.#fileRepo
             .createQueryBuilder('auto_file')
-            .where('auto_id = :id', {id: autoId})
+            .where('auto_id = :id', { id: autoId })
             .getOne();
-        if(autoFile === null) {
+        if (autoFile === null) {
             this.#logger.debug('findFileByBuchId: Keine Datei gefunden');
-            return
+            return;
         }
-        
+
         this.#logger.debug('findFileByBuchId: filename=%s', autoFile.filename);
         return autoFile;
     }
@@ -105,8 +103,8 @@ export class AutoReadService {
      * @throws NotFoundException falls keine Autos gefunden wurden.
      */
     async find(
-        suchkriterien : Suchkriterien | undefined,
-        pageable : Pageable,
+        suchkriterien: Suchkriterien | undefined,
+        pageable: Pageable,
     ): Promise<Slice<Auto>> {
         this.#logger.debug(
             'find: suchkriterien:%o, pageable=%o',
@@ -135,23 +133,24 @@ export class AutoReadService {
         return this.#createSlice(autos, totalElements);
     }
 
-    async #findAll(pageable: Pageable){
+    async #findAll(pageable: Pageable) {
         const queryBuilder = this.#queryBuilder.build({}, pageable);
         const autos = await queryBuilder.getMany();
         if (autos.length === 0) {
-            throw new NotFoundException(`Ungueltige Seite "${pageable.number}"`);
+            throw new NotFoundException(
+                `Ungueltige Seite "${pageable.number}"`,
+            );
         }
         const totalElements = await queryBuilder.getCount();
         return this.#createSlice(autos, totalElements);
-
     }
 
-    #createSlice(autos : Auto[], totalElements: number): Slice<Auto> {
-       const autoSlice : Slice<Auto> = {
-            content : autos,
-            totalElements
-       };
-       this.#logger.debug('createSlice: autoSlice=%o', autoSlice);
-       return autoSlice; 
+    #createSlice(autos: Auto[], totalElements: number): Slice<Auto> {
+        const autoSlice: Slice<Auto> = {
+            content: autos,
+            totalElements,
+        };
+        this.#logger.debug('createSlice: autoSlice=%o', autoSlice);
+        return autoSlice;
     }
 }
