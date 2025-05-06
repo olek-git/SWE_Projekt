@@ -8,14 +8,24 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { Public } from 'nest-keycloak-connect';
 import { createPageable } from '../service/pageable.js';
 
+/**
+ * Eingabedaten für das Abrufen eines Autos anhand der ID.
+ */
 export type IdInput = {
     readonly id: number;
 };
 
+/**
+ * Eingabedaten für die Suchkriterien eines Autos.
+ */
 export type SuchkriterienInput = {
     readonly suchkriterien: Suchkriterien;
 };
 
+/**
+ * Resolver für Auto-Abfragen (Query).
+ * Handhabt das Abrufen von Auto-Daten aus der Datenbank.
+ */
 @Resolver('Auto')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(ResponseTimeInterceptor)
@@ -24,10 +34,19 @@ export class AutoQueryResolver {
 
     readonly #logger = getLogger(AutoQueryResolver.name);
 
+    /**
+     * Konstruktor des AutoQueryResolvers.
+     * @param service Der Service, der für das Abrufen von Auto-Daten verantwortlich ist.
+     */
     constructor(service: AutoReadService) {
         this.#service = service;
     }
 
+    /**
+     * Abfrage, um ein Auto anhand der ID zu finden.
+     * @param id Die ID des Autos, das abgerufen werden soll.
+     * @returns Das Auto-Objekt, das der gegebenen ID entspricht.
+     */
     @Query('auto')
     @Public()
     async findById(@Args() { id }: IdInput) {
@@ -45,6 +64,11 @@ export class AutoQueryResolver {
         return auto;
     }
 
+    /**
+     * Abfrage, um eine Liste von Autos basierend auf den Suchkriterien zu finden.
+     * @param input Die Suchkriterien, die auf die Autos angewendet werden.
+     * @returns Eine Liste von Autos, die den Suchkriterien entsprechen.
+     */
     @Query('autos')
     @Public()
     async find(@Args() input: SuchkriterienInput | undefined) {

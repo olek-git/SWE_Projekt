@@ -24,10 +24,16 @@ export type FindByIdParams = {
 };
 
 /**
- * Die Klasse `AutoReadService` implementiert das Lesen für Autos und greift
- * mit _TypeORM_ auf eine relationale DB zu.
+ * Die Klasse `AutoReadService` bietet Methoden zum Lesen von Autos und deren Dateien aus einer relationalen Datenbank.
+ * Sie verwendet TypeORM und eine `QueryBuilder`-Klasse, um dynamische SQL-Abfragen zu erstellen.
+ * 
+ * @remarks
+ * Die Klasse implementiert Methoden zur Suche von Autos basierend auf verschiedenen Suchkriterien und zur Rückgabe von Dateien, die mit einem Auto verknüpft sind.
+ * 
+ * @see {@link QueryBuilder} für die Logik der Abfrageerstellung.
+ * @see {@link Auto} für die Struktur eines Auto-Objekts.
+ * @see {@link AutoFile} für die Struktur einer Auto-Datei.
  */
-
 @Injectable()
 export class AutoReadService {
     static readonly ID_PATTERN = /^[1-9]\d{0,10}$/u;
@@ -133,6 +139,13 @@ export class AutoReadService {
         return this.#createSlice(autos, totalElements);
     }
 
+    /**
+     * Hilfsmethode, um alle Autos ohne Filter zu suchen.
+     * 
+     * @param {Pageable} pageable - Die Seiteninformationen (z.B. Seitennummer, Anzahl der Datensätze pro Seite).
+     * @returns {Promise<Slice<Auto>>} Eine Seite mit allen Autos.
+     * @throws {NotFoundException} Wenn keine Autos gefunden werden.
+     */
     async #findAll(pageable: Pageable) {
         const queryBuilder = this.#queryBuilder.build({}, pageable);
         const autos = await queryBuilder.getMany();
@@ -145,6 +158,13 @@ export class AutoReadService {
         return this.#createSlice(autos, totalElements);
     }
 
+    /**
+     * Erzeugt ein `Slice`-Objekt aus den gefundenen Autos und der Gesamtanzahl der Elemente.
+     * 
+     * @param {Auto[]} autos - Die gefundenen Autos.
+     * @param {number} totalElements - Die Gesamtanzahl der Elemente.
+     * @returns {Slice<Auto>} Ein `Slice`-Objekt, das die gefundenen Autos und die Gesamtanzahl enthält.
+     */
     #createSlice(autos: Auto[], totalElements: number): Slice<Auto> {
         const autoSlice: Slice<Auto> = {
             content: autos,

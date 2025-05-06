@@ -13,10 +13,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Die Standardgröße für eine Seite.
+ * Wird verwendet, wenn die Seitengröße nicht angegeben oder ungültig ist.
+ */
 export const DEFAULT_PAGE_SIZE = 5;
+/**
+ * Die maximale Anzahl von Elementen pro Seite.
+ * Diese Grenze sollte nicht überschritten werden.
+ */
 export const MAX_PAGE_SIZE = 100;
+/**
+ * Die Standardseite (Seite 0).
+ * Wird verwendet, wenn die Seitennummer nicht angegeben oder ungültig ist.
+ */
 export const DEFAULT_PAGE_NUMBER = 0;
 
+/**
+ * Ein Typ, der die Seitenangabe und die Seitengröße enthält.
+ * Wird verwendet, um Seiteninformationen für paginierte API-Anfragen zu beschreiben.
+ */
 export type Pageable = {
     readonly number: number;
     readonly size: number;
@@ -27,6 +43,16 @@ type PageableProps = {
     readonly size?: string;
 };
 
+/**
+ * Erzeugt ein `Pageable`-Objekt aus den optionalen Parametern `number` und `size`.
+ * 
+ * - Falls keine gültige Seitenzahl oder Seitengröße angegeben wird, wird auf die Standardwerte `DEFAULT_PAGE_NUMBER` und `DEFAULT_PAGE_SIZE` zurückgegriffen.
+ * - Die Seitenzahl wird um 1 verringert (weil die erste Seite mit der Zahl 0 beginnt).
+ * - Die Seitengröße wird auf `DEFAULT_PAGE_SIZE` gesetzt, wenn sie kleiner als 1 oder größer als `MAX_PAGE_SIZE` ist.
+ * 
+ * @param params Die optionalen Parameter `number` und `size`, die als Strings übergeben werden.
+ * @returns Ein `Pageable`-Objekt, das die Seitenzahl und Seitengröße enthält.
+ */
 export function createPageable({ number, size }: PageableProps): Pageable {
     let numberFloat = Number(number);
     let numberInt: number;

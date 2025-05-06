@@ -11,14 +11,24 @@ import { Auto } from '../entity/auto.entity.js';
 import { Ausstattung } from '../entity/ausstattung.entity.js';
 import { IdInput } from './auto.query.resolver.js';
 
+/**
+ * Payload für eine erfolgreiche Erstellung eines Autos.
+ */
 export type createPayload = {
     readonly id: number;
 };
 
+/**
+ * Payload für eine erfolgreiche Auto-Aktualisierung mit Versionsangabe.
+ */
 export type UpdatePayload = {
     readonly version: number;
 };
 
+/**
+ * DTO für das Aktualisieren eines Autos.
+ * Erbt von AutoDTO und fügt Validierungen für `id` und `version` hinzu.
+ */
 export class AutoUpdateDTO extends AutoDTO {
     @IsNumberString()
     readonly id!: string;
@@ -28,6 +38,10 @@ export class AutoUpdateDTO extends AutoDTO {
     readonly version!: number;
 }
 
+/**
+ * Resolver für Auto-Operationen (Mutation).
+ * Handhabt das Erstellen, Aktualisieren und Löschen von Autos.
+ */
 @Resolver('Auto')
 @UseGuards(AuthGuard)
 @UseFilters(HttpExceptionFilter)
@@ -37,10 +51,19 @@ export class AutoMutationResolver {
 
     readonly #logger = getLogger(AutoMutationResolver.name);
 
+    /**
+     * Konstruktor des AutoMutationResolvers.
+     * @param service Der Service, der für das Erstellen, Aktualisieren und Löschen von Autos verantwortlich ist.
+     */
     constructor(service: AutoWriteService) {
         this.#service = service;
     }
 
+    /**
+     * Erzeugt ein neues Auto in der Datenbank.
+     * @param autoDTO Das DTO, das die zu erstellenden Auto-Daten enthält.
+     * @returns Das Payload-Objekt mit der ID des erstellten Autos.
+     */
     @Mutation()
     @Roles('admin', 'user')
     async create(@Args('input') autoDTO: AutoDTO): Promise<createPayload> {
@@ -57,6 +80,11 @@ export class AutoMutationResolver {
         return { id };
     }
 
+    /**
+     * Aktualisiert ein bestehendes Auto in der Datenbank.
+     * @param autoDTO Das DTO, das die zu aktualisierenden Auto-Daten enthält.
+     * @returns Das Payload-Objekt mit der neuen Version des Autos.
+     */
     @Mutation()
     @Roles('admin', 'user')
     async update(@Args('input') autoDTO: AutoUpdateDTO) {
@@ -75,6 +103,11 @@ export class AutoMutationResolver {
         return payload;
     }
 
+    /**
+     * Löscht ein Auto anhand der ID.
+     * @param id Das ID-Objekt, das die zu löschende Auto-ID enthält.
+     * @returns Gibt zurück, ob das Löschen erfolgreich war.
+     */
     @Mutation()
     @Roles('admin')
     async delete(@Args() id: IdInput) {
@@ -84,6 +117,12 @@ export class AutoMutationResolver {
         this.#logger.debug('deleteAuto: deletePerformed=%s', deletePerformed);
         return deletePerformed;
     }
+
+     /**
+     * Hilfsmethode zum Konvertieren von AutoDTO in ein Auto-Entity.
+     * @param autoDTO Das DTO, das die Auto-Daten enthält.
+     * @returns Die Auto-Entity.
+     */
     #autoDtoToAuto(autoDTO: AutoDTO): Auto {
         const ausstattungDTO = autoDTO.ausstattung;
         const ausstattung: Ausstattung = {
@@ -116,6 +155,11 @@ export class AutoMutationResolver {
         return auto;
     }
 
+    /**
+     * Hilfsmethode zum Konvertieren von AutoUpdateDTO in ein Auto-Entity.
+     * @param autoDTO Das DTO, das die Auto-Daten zum Update enthält.
+     * @returns Die Auto-Entity.
+     */
     #autoUpdateDtoToAuto(autoDTO: AutoUpdateDTO): Auto {
         return {
             id: undefined,

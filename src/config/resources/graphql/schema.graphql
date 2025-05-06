@@ -23,7 +23,7 @@ type Mutation {
     refresh(refresh_token: String!): TokenResult
 }
 
-"Daten zur Ausstattung eines Buches"
+"Daten zur Ausstattung eines Autos"
 type Ausstattung {
     klimaanlage: Boolean!
     sitzheizung: Boolean!
@@ -31,12 +31,14 @@ type Ausstattung {
     innenraummaterial: String!
 }
 
+"Daten zur Marke eines Autos"
 type Marke {
     name: String!
     gruendungsjahr: Int!
     gruender: String!
 }
 
+"Daten zu einem Auto"
 type Auto {
     id: Int!
     version: Int!
@@ -52,7 +54,7 @@ type Auto {
     marke: Marke
 }
 
-"Enum-Typ für die Getriebe Art eines Buches"
+"Enum-Typ für die Getriebe Art eines Autos"
 enum Art {
     AUTOMATIK
     MANUELL

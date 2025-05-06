@@ -26,12 +26,12 @@ package nest-keycloak-connect {
   hide Roles circle
 }
 
-package autorgb(255, 139, 139) {
+package auto #DDDDDD  {
   package entity #FFFFFF {
     class Auto <<entity>>
   }
 }
-package servicergb(255, 139, 139) {
+package service #DDDDDD  {
     class BuchWriteService << control >>
 }
 

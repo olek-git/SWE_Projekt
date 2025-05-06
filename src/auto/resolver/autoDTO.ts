@@ -55,7 +55,7 @@ export class AutoDtoOhneRef {
 }
 
 /**
- * Entity-Klasse für Bücher ohne TypeORM.
+ * Entity-Klasse für Autos ohne TypeORM.
  */
 export class AutoDTO extends AutoDtoOhneRef {
     @IsOptional()
