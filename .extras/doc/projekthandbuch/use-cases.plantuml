@@ -4,7 +4,7 @@ actor Gast
 actor Admin
 actor Kunde
 
-rectangle buch {
+rectangle auto {
     Gast --> (Auto suchen)
     Admin --> (Auto suchen)
     Admin --> (Auto anlegen)
